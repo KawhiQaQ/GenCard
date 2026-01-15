@@ -1,0 +1,35 @@
+{
+  "name": "ai-card-generator",
+  "version": "1.0.0",
+  "description": "AI-powered card generator with visual layout editor",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "start": "cd backend && npm start",
+    "start:prod": "npm run build && npm run start",
+    "setup": "npm run install:all && npm run build"
+  },
+  "keywords": [
+    "ai",
+    "card-generator",
+    "react",
+    "express",
+    "openai"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "ali-oss": "^6.23.0",
+    "axios": "^1.13.2",
+    "form-data": "^4.0.5"
+  }
+}
