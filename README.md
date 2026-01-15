@@ -1,10 +1,9 @@
 # GenCard - AI 卡牌生成器
 
 <p align="center">
-  <strong>🎴 通过prompt轻松创建精美的游戏卡牌</strong>
+  <strong>🎴 GenCard是基于AIGC模型的卡片生成工具，可以通过prompts轻松创建精美卡牌。</strong>
 </p>
 
-GenCard 是一款基于 AIGC 模型的卡牌生成工具，采用两阶段流程设计：先生成或上传原画，再通过 AI 智能生成背景，最终合成精美的游戏卡牌。
 
 ## 效果展示
 
