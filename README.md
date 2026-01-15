@@ -6,6 +6,17 @@
 
 GenCard 是一款基于 AIGC 模型的卡牌生成工具，采用两阶段流程设计：先生成或上传原画，再通过 AI 智能生成背景，最终合成精美的游戏卡牌。
 
+## 效果展示
+
+<p align="center">
+  <img src="figures/1.png" width="45%" />
+  <img src="figures/8.png" width="45%" />
+</p>
+<p align="center">
+  <img src="figures/2.png" width="45%" />
+  <img src="figures/3.png" width="45%" />
+</p>
+
 ## ✨ 功能特性
 
 - 🎨 **AI 原画生成**：输入描述即可生成聚焦人物的原画
@@ -13,7 +24,6 @@ GenCard 是一款基于 AIGC 模型的卡牌生成工具，采用两阶段流程
 - 🖼️ **固定布局编辑**：预设的卡牌布局，包含原画框和多个文本框
 - 🎯 **智能背景生成**：AI 根据提示词生成背景，同时保留原画内容
 - ✨ **精美边框装饰**：自动添加金色/棕色边框，提升卡牌质感
-- 💾 **一键下载**：生成完成后可直接下载 PNG 格式卡牌
 
 ## 🛠️ 技术栈
 
@@ -48,9 +58,7 @@ GenCard/
 
 ---
 
-# 📖 新手安装配置指南
-
-即使没有编程基础，按照以下步骤也能成功运行项目。
+# 📖 安装配置指南
 
 ## 第一步：准备工作
 
@@ -62,7 +70,7 @@ GenCard/
 4. 验证安装：
    - 按 `Win + R`，输入 `cmd` 打开命令提示符
    - 输入 `node --version`
-   - 显示版本号（如 `v18.x.x`）说明安装成功
+   - 显示版本号（如 `v20.x.x`）说明安装成功
 
 ### 1.2 获取阿里云 API 密钥
 
@@ -131,6 +139,11 @@ ALIYUN_OSS_ACCESS_KEY_ID=你的AccessKeyID
 ALIYUN_OSS_ACCESS_KEY_SECRET=你的AccessKeySecret
 ALIYUN_OSS_BUCKET=你的Bucket名称
 ALIYUN_OSS_REGION=oss-cn-shanghai
+
+# 模型选择
+TEXT2IMAGE_MODEL=wanx-v1 (0.16/张，新用户500张免费)
+or
+TEXT2IMAGE_MODEL=wan2.5-t2i-preview (0.20/张，新用户100张免费)
 ```
 
 **OSS Region 对照表：**
@@ -176,9 +189,10 @@ npm run dev
 ### 第二阶段：编辑卡牌
 
 1. **编辑文本框**：点击文本框，在右侧面板修改内容和底色
-2. **输入背景提示词**：描述想要的背景风格
+2. **视觉效果**：包括文本框纹理、框体占比等设置
+3. **输入背景提示词**：描述想要的背景风格
    - 示例："奇幻风格，星空背景，魔法光芒"
-3. 点击"生成卡牌"
+4. 点击"生成卡牌"
 
 ### 第三阶段：下载结果
 
@@ -195,33 +209,6 @@ npm run dev
 | `npm run build` | 构建生产版本 |
 | `npm start` | 启动生产服务器 |
 
----
-
-## ❓ 常见问题
-
-### Q: 端口被占用
-```
-Error: listen EADDRINUSE: address already in use :::3000
-```
-**解决**：修改 `backend\.env` 中的 `PORT=3001`
-
-### Q: 原画/背景生成失败
-1. 检查 `DASHSCOPE_API_KEY` 是否正确
-2. 确认阿里云账户有余额
-3. 检查网络连接
-
-### Q: OSS 上传失败
-1. 确认 Bucket 权限为"公共读"
-2. 检查 AccessKey 配置
-3. 确认 Region 与 Bucket 地域匹配
-
-### Q: 上传图片失败
-- 确保图片小于 10MB
-- 支持格式：JPG、PNG、WEBP
-
-### Q: npm 命令无法识别
-- 重新安装 Node.js
-- 确保安装时勾选 "Add to PATH"
 
 ---
 
@@ -252,8 +239,8 @@ npm run dev
 ## 🚀 未来计划
 
 - [ ] 支持更多卡牌模板
+- [ ] 支持更多布局
 - [ ] 批量生成功能
-- [ ] 用户账户系统
 - [ ] 云端存储历史记录
 - [ ] 更多 AI 模型支持
 
