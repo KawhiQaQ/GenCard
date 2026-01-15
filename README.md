@@ -9,11 +9,11 @@ GenCard 是一款基于 AIGC 模型的卡牌生成工具，采用两阶段流程
 ## 效果展示
 
 <p align="center">
-  <img src="figures/1.png" width="45%" />
+  <img src="figures/2.png" width="45%" />
   <img src="figures/8.png" width="45%" />
 </p>
 <p align="center">
-  <img src="figures/2.png" width="45%" />
+  <img src="figures/1.png" width="45%" />
   <img src="figures/3.png" width="45%" />
 </p>
 
