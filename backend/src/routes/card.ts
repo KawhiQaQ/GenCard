@@ -231,7 +231,7 @@ router.post('/generate-background', asyncHandler(async (req, res) => {
   // 获取文本框底色 ID（默认 obsidian）
   const textBoxColorId = request.textBoxColorId || 'obsidian';
 
-  // 获取边框预设（可选）
+  // 获取边框预设
   const borderPreset = request.borderPreset;
 
   // 获取视觉增强选项（可选，使用默认值）
@@ -240,7 +240,7 @@ router.post('/generate-background', asyncHandler(async (req, res) => {
   const glowIntensity: GlowIntensity = request.glowIntensity || 'medium';
   const scalePreset: ScalePreset = request.scalePreset || 'standard';
 
-  console.log('=== 开始卡牌背景生成（简化流程） ===');
+  console.log('=== 开始卡牌背景生成 ===');
   console.log('原画 URL:', request.artworkUrl);
   console.log('背景提示词:', request.backgroundPrompt);
   console.log('布局变体:', layoutVariant || '未指定');

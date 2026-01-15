@@ -553,9 +553,9 @@ export async function composeCard(options: ComposeCardOptions): Promise<Buffer> 
   console.log('layoutVariant:', layoutVariant);
   console.log('layoutMode:', layoutMode);
   console.log('effectiveLayoutMode:', effectiveLayoutMode);
-  console.log('cropAnchor (用户指定):', cropAnchor);
-  console.log('effectiveCropAnchor (最终使用):', effectiveCropAnchor);
-  console.log('getDefaultCropAnchor(effectiveLayoutMode):', getDefaultCropAnchor(effectiveLayoutMode));
+  console.log('cropAnchor:', cropAnchor);
+  console.log('effectiveCropAnchor:', effectiveCropAnchor);
+  console.log('getDefaultCropAnchor:', getDefaultCropAnchor(effectiveLayoutMode));
   
   // 应用缩放预设（Requirements: 7.1, 7.2, 7.3, 7.4, 7.5）
   if (scalePreset && scalePreset !== 'standard') {
@@ -721,18 +721,36 @@ async function renderTextBoxBackgrounds(
   for (let i = 0; i < allTextBoxes.length; i++) {
     const layoutBox = allTextBoxes[i];
     
-    // 创建文本框底色（质感半透明 + 渐变效果 + 自定义颜色 + 纹理叠加 + 毛玻璃模糊）
+    // 创建文本框底色（质感半透明 + 渐变效果 + 自定义颜色 + 毛玻璃模糊）
+    // 注意：纹理叠加层单独处理，使用 Sharp 的 overlay 混合模式
     const backgroundSvg = createTextBoxBackgroundSvg(
       layoutBox.width, 
       layoutBox.height,
       gradientColors,
-      texture,
+      { ...texture, pattern: 'none' },  // 先不渲染纹理，后面用 Sharp 叠加
       undefined,  // gradientLightConfig - use default
       blur        // blurConfig
     );
-    const backgroundBuffer = await sharp(Buffer.from(backgroundSvg))
+    let backgroundBuffer = await sharp(Buffer.from(backgroundSvg))
       .png()
       .toBuffer();
+    
+    // 使用 Sharp 的 overlay 混合模式叠加纹理层
+    // 这样可以正确渲染纹理效果，因为 SVG 的 mix-blend-mode 在 Sharp/librsvg 中不支持
+    if (texture.pattern !== 'none') {
+      const textureSvg = createTextureOverlaySvg(layoutBox.width, layoutBox.height, texture);
+      const textureBuffer = await sharp(Buffer.from(textureSvg))
+        .png()
+        .toBuffer();
+      
+      backgroundBuffer = await sharp(backgroundBuffer)
+        .composite([{
+          input: textureBuffer,
+          blend: 'overlay'
+        }])
+        .png()
+        .toBuffer();
+    }
     
     composites.push({
       input: backgroundBuffer,
@@ -753,6 +771,37 @@ async function renderTextBoxBackgrounds(
     .composite(composites)
     .png()
     .toBuffer();
+}
+
+/**
+ * 创建纹理叠加层 SVG（用于 Sharp overlay 混合）
+ * 
+ * @param width - 宽度
+ * @param height - 高度
+ * @param textureConfig - 纹理配置
+ * @returns SVG 字符串
+ */
+function createTextureOverlaySvg(
+  width: number,
+  height: number,
+  textureConfig: TextureConfig
+): string {
+  const borderRadius = PREMIUM_TEXTBOX_STYLE.borderRadius;
+  const texturePatternDef = generateTexturePattern(textureConfig);
+  
+  return `
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        ${texturePatternDef}
+        <!-- 圆角裁剪 -->
+        <clipPath id="roundedClip">
+          <rect width="${width}" height="${height}" rx="${borderRadius}" ry="${borderRadius}"/>
+        </clipPath>
+      </defs>
+      <!-- 纹理层 - 使用圆角裁剪 -->
+      <rect width="${width}" height="${height}" fill="url(#texturePattern)" opacity="${textureConfig.opacity}" clip-path="url(#roundedClip)"/>
+    </svg>
+  `;
 }
 
 /**
@@ -808,11 +857,9 @@ function createTextBoxBackgroundSvg(
   // 获取模糊配置，默认使用中度模糊 (Requirements: 3.1, 3.2)
   const blur = blurConfig || BLUR_PRESETS['medium'];
   
-  // 纹理叠加层（仅当纹理类型不为 none 时渲染）
-  // 使用 overlay 混合模式，确保纹理不改变底色的色相和饱和度 (Requirements: 1.5)
-  const textureOverlay = texture.pattern !== 'none' 
-    ? `<rect width="${width}" height="${height}" rx="${borderRadius}" ry="${borderRadius}" fill="url(#texturePattern)" opacity="${texture.opacity}" style="mix-blend-mode: overlay;"/>`
-    : '';
+  // 纹理叠加层现在通过 Sharp 的 overlay 混合模式单独处理
+  // 这样可以正确渲染纹理效果，因为 SVG 的 mix-blend-mode 在 Sharp/librsvg 中不支持
+  const textureOverlay = '';
   
   // 毛玻璃模糊滤镜定义 (Requirements: 3.1, 3.2, 3.3, 3.4)
   // 使用 feGaussianBlur 模拟 backdrop-filter blur 效果

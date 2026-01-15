@@ -81,7 +81,7 @@ export function getModeInfo() {
     error: validation.error,
     description: mode === 'dalle' 
       ? 'Using DALL-E 3 for image generation (legacy mode)'
-      : 'Using ControlNet + Qwen-Image for image generation (recommended)',
+      : 'Using wanx-v1 or wan2.5-t2i-preview',
     recommendation: mode === 'dalle'
       ? 'Consider migrating to Qwen mode for better layout control and uploaded image support'
       : 'You are using the recommended generation mode'
