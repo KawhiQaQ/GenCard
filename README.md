@@ -1,4 +1,4 @@
-# GenCard - AI 卡牌生成器
+# GenCard (简卡) - AI 卡牌生成器
 
 <p align="center">
   <strong>🎴 GenCard是基于AIGC模型的卡片生成工具，可以通过prompts轻松创建精美卡牌。</strong>
