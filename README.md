@@ -82,18 +82,6 @@ GenCard/
 3. 找到 "API-KEY 管理" → "创建新的 API-KEY"
 4. 复制 API Key 保存备用
 
-#### OSS 配置（用于图片临时存储）
-
-1. 访问 [OSS 控制台](https://oss.console.aliyun.com/)
-2. 创建 Bucket：
-   - 点击"创建 Bucket"
-   - 输入名称（如：`my-gencard`）
-   - 选择地域（如：华东1-上海）
-   - **读写权限选择"公共读"**（重要！）
-3. 获取 AccessKey：
-   - 点击右上角头像 → AccessKey 管理
-   - 创建并保存 AccessKey ID 和 Secret
-
 ## 第二步：下载项目
 
 ### 方式一：Git 克隆（推荐）
@@ -132,12 +120,6 @@ npm run install:all
 ```env
 # DashScope API Key（必填）
 DASHSCOPE_API_KEY=你的DashScope_API_Key
-
-# 阿里云 OSS 配置（必填）
-ALIYUN_OSS_ACCESS_KEY_ID=你的AccessKeyID
-ALIYUN_OSS_ACCESS_KEY_SECRET=你的AccessKeySecret
-ALIYUN_OSS_BUCKET=你的Bucket名称
-ALIYUN_OSS_REGION=oss-cn-shanghai
 
 # 模型选择
 TEXT2IMAGE_MODEL=wanx-v1 (0.16/张，新用户500张免费)
@@ -232,16 +214,6 @@ npm run dev
 | `/api/generate/v2` | POST | Qwen 模式生成 |
 | `/api/upload` | POST | 上传图片 |
 | `/api/health` | GET | 健康检查 |
-
----
-
-## 🚀 未来计划
-
-- [ ] 支持更多卡牌模板
-- [ ] 支持更多布局
-- [ ] 批量生成功能
-- [ ] 云端存储历史记录
-- [ ] 更多 AI 模型支持
 
 ---
 
